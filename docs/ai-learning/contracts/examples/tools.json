@@ -1,0 +1,290 @@
+[
+  {
+    "name": "get_course_outline",
+    "input": {
+      "courseId": "1"
+    },
+    "success": {
+      "ok": true,
+      "data": {
+        "courseId": "1",
+        "title": "Fixture course",
+        "description": null,
+        "enrolled": true,
+        "lessons": [],
+        "knowledgePoints": []
+      },
+      "error": null
+    },
+    "empty": {
+      "ok": true,
+      "data": {
+        "courseId": "1",
+        "title": "fixture",
+        "description": "fixture",
+        "enrolled": false,
+        "lessons": [],
+        "knowledgePoints": []
+      },
+      "error": null
+    },
+    "failure": {
+      "ok": false,
+      "data": null,
+      "error": {
+        "code": "NOT_FOUND",
+        "message": "Resource unavailable",
+        "retryable": false
+      }
+    },
+    "invalidInput": {
+      "courseId": "1",
+      "userId": "99"
+    }
+  },
+  {
+    "name": "get_my_learning_summary",
+    "input": {
+      "courseId": "1"
+    },
+    "success": {
+      "ok": true,
+      "data": {
+        "courseId": "1",
+        "range": {
+          "from": null,
+          "to": null
+        },
+        "asOf": "2026-10-07T12:00:00Z",
+        "accepted": 0,
+        "judged": 0,
+        "passRate": null,
+        "statusCounts": {
+          "SYSTEM_ERROR": 1
+        },
+        "lessons": [],
+        "evidence": [
+          {
+            "id": "submission:7:judged:1",
+            "type": "SUBMISSION_JUDGED",
+            "occurredAt": "2026-10-07T11:00:00Z"
+          }
+        ]
+      },
+      "error": null
+    },
+    "empty": {
+      "ok": true,
+      "data": {
+        "courseId": "1",
+        "range": {
+          "from": null,
+          "to": null
+        },
+        "asOf": "2026-10-07T12:00:00Z",
+        "accepted": 0,
+        "judged": 0,
+        "passRate": null,
+        "statusCounts": {},
+        "lessons": [],
+        "evidence": []
+      },
+      "error": null
+    },
+    "failure": {
+      "ok": false,
+      "data": null,
+      "error": {
+        "code": "NOT_FOUND",
+        "message": "Resource unavailable",
+        "retryable": false
+      }
+    },
+    "invalidInput": {
+      "courseId": "1",
+      "userId": "99"
+    }
+  },
+  {
+    "name": "list_my_submissions",
+    "input": {},
+    "success": {
+      "ok": true,
+      "data": {
+        "items": [
+          {
+            "id": "7",
+            "problemId": "1",
+            "courseId": null,
+            "lessonId": null,
+            "status": "COMPILE_ERROR",
+            "assistanceLevel": "UNKNOWN",
+            "createdAt": "2026-10-07T12:00:00Z"
+          }
+        ],
+        "nextCursor": null
+      },
+      "error": null
+    },
+    "empty": {
+      "ok": true,
+      "data": {
+        "items": [],
+        "nextCursor": "1"
+      },
+      "error": null
+    },
+    "failure": {
+      "ok": false,
+      "data": null,
+      "error": {
+        "code": "NOT_FOUND",
+        "message": "Resource unavailable",
+        "retryable": false
+      }
+    },
+    "invalidInput": {
+      "userId": "99"
+    }
+  },
+  {
+    "name": "get_my_submission_detail",
+    "input": {
+      "submissionId": "7"
+    },
+    "success": {
+      "ok": true,
+      "data": {
+        "submission": {
+          "id": "7",
+          "problemId": "1",
+          "courseId": null,
+          "lessonId": null,
+          "status": "COMPILE_ERROR",
+          "assistanceLevel": "UNKNOWN",
+          "createdAt": "2026-10-07T12:00:00Z"
+        },
+        "problemTitle": "A+B",
+        "publicContent": "Add two integers.",
+        "language": "java",
+        "code": "public class Main { public static void main(String[] args) {} }",
+        "codeTruncated": false,
+        "timeUsed": 0,
+        "memoryUsed": 0,
+        "errorSummary": "Main.java:1: missing semicolon"
+      },
+      "error": null
+    },
+    "empty": null,
+    "failure": {
+      "ok": false,
+      "data": null,
+      "error": {
+        "code": "NOT_FOUND",
+        "message": "Resource unavailable",
+        "retryable": false
+      }
+    },
+    "invalidInput": {
+      "submissionId": "7",
+      "userId": "99"
+    }
+  },
+  {
+    "name": "search_course_knowledge",
+    "input": {
+      "courseId": "1",
+      "query": "fixture"
+    },
+    "success": {
+      "ok": true,
+      "data": {
+        "retrievalMode": "KEYWORD",
+        "items": [
+          {
+            "text": "An interval records observed playback.",
+            "score": 1,
+            "citation": {
+              "citationId": "chunk:1:v1",
+              "courseId": "1",
+              "lessonId": "2",
+              "resourceId": "3",
+              "documentId": "4",
+              "documentVersion": "1",
+              "title": "Fixture handout",
+              "page": 1,
+              "startSeconds": null,
+              "endSeconds": null,
+              "quote": "An interval records observed playback.",
+              "contentUrl": "/api/knowledge/citations/chunk:1:v1/content"
+            }
+          }
+        ]
+      },
+      "error": null
+    },
+    "empty": {
+      "ok": true,
+      "data": {
+        "retrievalMode": "KEYWORD",
+        "items": []
+      },
+      "error": null
+    },
+    "failure": {
+      "ok": false,
+      "data": null,
+      "error": {
+        "code": "NOT_FOUND",
+        "message": "Resource unavailable",
+        "retryable": false
+      }
+    },
+    "invalidInput": {
+      "courseId": "1",
+      "query": "fixture",
+      "userId": "99"
+    }
+  },
+  {
+    "name": "list_practice_candidates",
+    "input": {
+      "courseId": "1"
+    },
+    "success": {
+      "ok": true,
+      "data": {
+        "items": [
+          {
+            "problemId": "1",
+            "title": "A+B",
+            "difficulty": 1,
+            "knowledgePointIds": [],
+            "accepted": false
+          }
+        ]
+      },
+      "error": null
+    },
+    "empty": {
+      "ok": true,
+      "data": {
+        "items": []
+      },
+      "error": null
+    },
+    "failure": {
+      "ok": false,
+      "data": null,
+      "error": {
+        "code": "NOT_FOUND",
+        "message": "Resource unavailable",
+        "retryable": false
+      }
+    },
+    "invalidInput": {
+      "courseId": "1",
+      "userId": "99"
+    }
+  }
+]

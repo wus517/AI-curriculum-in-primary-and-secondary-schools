@@ -1,0 +1,61 @@
+[
+  {
+    "event": "accepted",
+    "data": {
+      "messageId": "8",
+      "requestId": "fixture-request",
+      "seq": 1
+    }
+  },
+  {
+    "event": "tool_status",
+    "data": {
+      "toolName": "get_course_outline",
+      "status": "RUNNING",
+      "seq": 2
+    }
+  },
+  {
+    "event": "delta",
+    "data": {
+      "messageId": "8",
+      "seq": 3,
+      "text": "建议先检查循环边界。"
+    }
+  },
+  {
+    "event": "citations",
+    "data": {
+      "messageId": "8",
+      "seq": 4,
+      "items": [
+        {
+          "citationId": "chunk:1:v1",
+          "courseId": "1",
+          "lessonId": "2",
+          "resourceId": "3",
+          "documentId": "4",
+          "documentVersion": "1",
+          "title": "Fixture handout",
+          "page": 1,
+          "startSeconds": null,
+          "endSeconds": null,
+          "quote": "An interval records observed playback.",
+          "contentUrl": "/api/knowledge/citations/chunk:1:v1/content"
+        }
+      ]
+    }
+  },
+  {
+    "event": "completed",
+    "data": {
+      "messageId": "8",
+      "seq": 5,
+      "status": "COMPLETED",
+      "usage": {
+        "inputTokens": 80,
+        "outputTokens": 12
+      }
+    }
+  }
+]

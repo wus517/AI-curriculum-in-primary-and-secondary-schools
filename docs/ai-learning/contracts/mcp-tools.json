@@ -1,0 +1,1700 @@
+{
+  "contractVersion": "0.1.1",
+  "protocolVersion": "2025-03-26",
+  "sdk": "io.modelcontextprotocol.sdk:mcp:0.11.3",
+  "transportPolicy": "Internal SDK transport only; signed credential in request metadata, never in advertised tool arguments; mandatory server verification",
+  "tools": [
+    {
+      "name": "get_course_outline",
+      "description": "get course outline",
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      },
+      "inputSchema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "courseId": {
+            "type": "string",
+            "pattern": "^[1-9][0-9]{0,18}$",
+            "maxLength": 19
+          }
+        },
+        "required": [
+          "courseId"
+        ],
+        "additionalProperties": false
+      },
+      "outputSchema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "ok": {
+            "type": "boolean"
+          },
+          "data": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/CourseOutline"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "error": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/ToolError"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "ok",
+          "data",
+          "error"
+        ],
+        "additionalProperties": false,
+        "oneOf": [
+          {
+            "properties": {
+              "ok": {
+                "const": true
+              },
+              "data": {
+                "$ref": "#/$defs/CourseOutline"
+              },
+              "error": {
+                "type": "null"
+              }
+            }
+          },
+          {
+            "properties": {
+              "ok": {
+                "const": false
+              },
+              "data": {
+                "type": "null"
+              },
+              "error": {
+                "$ref": "#/$defs/ToolError"
+              }
+            }
+          }
+        ],
+        "$defs": {
+          "ToolError": {
+            "type": "object",
+            "properties": {
+              "code": {
+                "type": "string",
+                "enum": [
+                  "INVALID_ARGUMENT",
+                  "NOT_FOUND",
+                  "FORBIDDEN",
+                  "TIMEOUT",
+                  "UNAVAILABLE",
+                  "INTERNAL"
+                ]
+              },
+              "message": {
+                "type": "string",
+                "maxLength": 200
+              },
+              "retryable": {
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "code",
+              "message",
+              "retryable"
+            ],
+            "additionalProperties": false
+          },
+          "CourseOutline": {
+            "type": "object",
+            "properties": {
+              "courseId": {
+                "type": "string",
+                "pattern": "^[1-9][0-9]{0,18}$",
+                "maxLength": 19
+              },
+              "title": {
+                "type": "string"
+              },
+              "description": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "enrolled": {
+                "type": "boolean"
+              },
+              "lessons": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/Lesson"
+                }
+              },
+              "knowledgePoints": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/KnowledgePoint"
+                }
+              }
+            },
+            "required": [
+              "courseId",
+              "title",
+              "description",
+              "enrolled",
+              "lessons",
+              "knowledgePoints"
+            ],
+            "additionalProperties": false
+          },
+          "KnowledgePoint": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "pattern": "^[1-9][0-9]{0,18}$",
+                "maxLength": 19
+              },
+              "courseId": {
+                "type": "string",
+                "pattern": "^[1-9][0-9]{0,18}$",
+                "maxLength": 19
+              },
+              "name": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 128
+              },
+              "description": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "active": {
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "id",
+              "courseId",
+              "name",
+              "description",
+              "active"
+            ],
+            "additionalProperties": false
+          },
+          "Lesson": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "pattern": "^[1-9][0-9]{0,18}$",
+                "maxLength": 19
+              },
+              "courseId": {
+                "type": "string",
+                "pattern": "^[1-9][0-9]{0,18}$",
+                "maxLength": 19
+              },
+              "title": {
+                "type": "string"
+              },
+              "objectives": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "sortOrder": {
+                "type": "integer"
+              },
+              "status": {
+                "$ref": "#/$defs/LessonStatus"
+              },
+              "resources": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/ResourceRef"
+                }
+              },
+              "problems": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/ProblemRef"
+                }
+              },
+              "knowledgePoints": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/KnowledgePoint"
+                }
+              }
+            },
+            "required": [
+              "id",
+              "courseId",
+              "title",
+              "objectives",
+              "sortOrder",
+              "status",
+              "resources",
+              "problems",
+              "knowledgePoints"
+            ],
+            "additionalProperties": false
+          },
+          "ProblemRef": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "pattern": "^[1-9][0-9]{0,18}$",
+                "maxLength": 19
+              },
+              "title": {
+                "type": "string"
+              },
+              "difficulty": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 3
+              },
+              "sortOrder": {
+                "type": "integer"
+              },
+              "knowledgePointIds": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "pattern": "^[1-9][0-9]{0,18}$",
+                  "maxLength": 19
+                }
+              }
+            },
+            "required": [
+              "id",
+              "title",
+              "difficulty",
+              "sortOrder",
+              "knowledgePointIds"
+            ],
+            "additionalProperties": false
+          },
+          "ResourceRef": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "pattern": "^[1-9][0-9]{0,18}$",
+                "maxLength": 19
+              },
+              "title": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "resourceType": {
+                "type": "string",
+                "enum": [
+                  "video",
+                  "ppt"
+                ]
+              },
+              "version": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 64
+              },
+              "sortOrder": {
+                "type": "integer"
+              },
+              "contentUrl": {
+                "type": "string",
+                "pattern": "^/api/learning/resources/[1-9][0-9]*/content$"
+              }
+            },
+            "required": [
+              "id",
+              "title",
+              "resourceType",
+              "version",
+              "sortOrder",
+              "contentUrl"
+            ],
+            "additionalProperties": false
+          },
+          "LessonStatus": {
+            "type": "string",
+            "enum": [
+              "DRAFT",
+              "PUBLISHED",
+              "DISABLED"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "name": "get_my_learning_summary",
+      "description": "get my learning summary",
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      },
+      "inputSchema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "courseId": {
+            "type": "string",
+            "pattern": "^[1-9][0-9]{0,18}$",
+            "maxLength": 19
+          },
+          "from": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "to": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "courseId"
+        ],
+        "additionalProperties": false
+      },
+      "outputSchema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "ok": {
+            "type": "boolean"
+          },
+          "data": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/LearningSummary"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "error": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/ToolError"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "ok",
+          "data",
+          "error"
+        ],
+        "additionalProperties": false,
+        "oneOf": [
+          {
+            "properties": {
+              "ok": {
+                "const": true
+              },
+              "data": {
+                "$ref": "#/$defs/LearningSummary"
+              },
+              "error": {
+                "type": "null"
+              }
+            }
+          },
+          {
+            "properties": {
+              "ok": {
+                "const": false
+              },
+              "data": {
+                "type": "null"
+              },
+              "error": {
+                "$ref": "#/$defs/ToolError"
+              }
+            }
+          }
+        ],
+        "$defs": {
+          "ToolError": {
+            "type": "object",
+            "properties": {
+              "code": {
+                "type": "string",
+                "enum": [
+                  "INVALID_ARGUMENT",
+                  "NOT_FOUND",
+                  "FORBIDDEN",
+                  "TIMEOUT",
+                  "UNAVAILABLE",
+                  "INTERNAL"
+                ]
+              },
+              "message": {
+                "type": "string",
+                "maxLength": 200
+              },
+              "retryable": {
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "code",
+              "message",
+              "retryable"
+            ],
+            "additionalProperties": false
+          },
+          "LearningSummary": {
+            "type": "object",
+            "properties": {
+              "courseId": {
+                "type": "string",
+                "pattern": "^[1-9][0-9]{0,18}$",
+                "maxLength": 19
+              },
+              "range": {
+                "$ref": "#/$defs/TimeRange"
+              },
+              "asOf": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "accepted": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "judged": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "passRate": {
+                "anyOf": [
+                  {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 1
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "statusCounts": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "integer",
+                  "minimum": 0
+                }
+              },
+              "lessons": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/LessonProgress"
+                }
+              },
+              "evidence": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/Evidence"
+                },
+                "maxItems": 100
+              }
+            },
+            "required": [
+              "courseId",
+              "range",
+              "asOf",
+              "accepted",
+              "judged",
+              "passRate",
+              "statusCounts",
+              "lessons",
+              "evidence"
+            ],
+            "additionalProperties": false
+          },
+          "Evidence": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 128
+              },
+              "type": {
+                "type": "string"
+              },
+              "occurredAt": {
+                "type": "string",
+                "format": "date-time"
+              }
+            },
+            "required": [
+              "id",
+              "type",
+              "occurredAt"
+            ],
+            "additionalProperties": false
+          },
+          "LessonProgress": {
+            "type": "object",
+            "properties": {
+              "lessonId": {
+                "type": "string",
+                "pattern": "^[1-9][0-9]{0,18}$",
+                "maxLength": 19
+              },
+              "selfReportedComplete": {
+                "type": "boolean"
+              },
+              "updatedAt": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "resources": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/ResourceProgress"
+                }
+              }
+            },
+            "required": [
+              "lessonId",
+              "selfReportedComplete",
+              "updatedAt",
+              "resources"
+            ],
+            "additionalProperties": false
+          },
+          "ResourceProgress": {
+            "type": "object",
+            "properties": {
+              "resourceId": {
+                "type": "string",
+                "pattern": "^[1-9][0-9]{0,18}$",
+                "maxLength": 19
+              },
+              "resourceVersion": {
+                "type": "string"
+              },
+              "intervals": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/Interval"
+                }
+              },
+              "recordedSeconds": {
+                "type": "number",
+                "minimum": 0
+              },
+              "lastPosition": {
+                "type": "number",
+                "minimum": 0
+              }
+            },
+            "required": [
+              "resourceId",
+              "resourceVersion",
+              "intervals",
+              "recordedSeconds",
+              "lastPosition"
+            ],
+            "additionalProperties": false
+          },
+          "Interval": {
+            "type": "object",
+            "properties": {
+              "start": {
+                "type": "number",
+                "minimum": 0
+              },
+              "end": {
+                "type": "number",
+                "exclusiveMinimum": 0
+              }
+            },
+            "required": [
+              "start",
+              "end"
+            ],
+            "additionalProperties": false
+          },
+          "TimeRange": {
+            "type": "object",
+            "properties": {
+              "from": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "to": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            },
+            "required": [
+              "from",
+              "to"
+            ],
+            "additionalProperties": false
+          }
+        }
+      }
+    },
+    {
+      "name": "list_my_submissions",
+      "description": "list my submissions",
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      },
+      "inputSchema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "courseId": {
+            "type": "string",
+            "pattern": "^[1-9][0-9]{0,18}$",
+            "maxLength": 19
+          },
+          "problemId": {
+            "type": "string",
+            "pattern": "^[1-9][0-9]{0,18}$",
+            "maxLength": 19
+          },
+          "pageSize": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 20,
+            "default": 20
+          },
+          "cursor": {
+            "type": "string",
+            "pattern": "^[1-9][0-9]{0,18}$",
+            "maxLength": 19
+          }
+        },
+        "required": [],
+        "additionalProperties": false
+      },
+      "outputSchema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "ok": {
+            "type": "boolean"
+          },
+          "data": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/SubmissionCursor"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "error": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/ToolError"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "ok",
+          "data",
+          "error"
+        ],
+        "additionalProperties": false,
+        "oneOf": [
+          {
+            "properties": {
+              "ok": {
+                "const": true
+              },
+              "data": {
+                "$ref": "#/$defs/SubmissionCursor"
+              },
+              "error": {
+                "type": "null"
+              }
+            }
+          },
+          {
+            "properties": {
+              "ok": {
+                "const": false
+              },
+              "data": {
+                "type": "null"
+              },
+              "error": {
+                "$ref": "#/$defs/ToolError"
+              }
+            }
+          }
+        ],
+        "$defs": {
+          "ToolError": {
+            "type": "object",
+            "properties": {
+              "code": {
+                "type": "string",
+                "enum": [
+                  "INVALID_ARGUMENT",
+                  "NOT_FOUND",
+                  "FORBIDDEN",
+                  "TIMEOUT",
+                  "UNAVAILABLE",
+                  "INTERNAL"
+                ]
+              },
+              "message": {
+                "type": "string",
+                "maxLength": 200
+              },
+              "retryable": {
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "code",
+              "message",
+              "retryable"
+            ],
+            "additionalProperties": false
+          },
+          "SubmissionCursor": {
+            "type": "object",
+            "properties": {
+              "items": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/SubmissionSummary"
+                },
+                "maxItems": 20
+              },
+              "nextCursor": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "pattern": "^[1-9][0-9]{0,18}$",
+                    "maxLength": 19
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            },
+            "required": [
+              "items",
+              "nextCursor"
+            ],
+            "additionalProperties": false
+          },
+          "SubmissionSummary": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "pattern": "^[1-9][0-9]{0,18}$",
+                "maxLength": 19
+              },
+              "problemId": {
+                "type": "string",
+                "pattern": "^[1-9][0-9]{0,18}$",
+                "maxLength": 19
+              },
+              "courseId": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "pattern": "^[1-9][0-9]{0,18}$",
+                    "maxLength": 19
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "lessonId": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "pattern": "^[1-9][0-9]{0,18}$",
+                    "maxLength": 19
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "status": {
+                "$ref": "#/$defs/JudgeStatus"
+              },
+              "assistanceLevel": {
+                "$ref": "#/$defs/AssistanceLevel"
+              },
+              "createdAt": {
+                "type": "string",
+                "format": "date-time"
+              }
+            },
+            "required": [
+              "id",
+              "problemId",
+              "courseId",
+              "lessonId",
+              "status",
+              "assistanceLevel",
+              "createdAt"
+            ],
+            "additionalProperties": false
+          },
+          "AssistanceLevel": {
+            "type": "string",
+            "enum": [
+              "NONE",
+              "HINT",
+              "SOLUTION",
+              "UNKNOWN"
+            ]
+          },
+          "JudgeStatus": {
+            "type": "string",
+            "enum": [
+              "PENDING",
+              "JUDGING",
+              "ACCEPTED",
+              "WRONG_ANSWER",
+              "COMPILE_ERROR",
+              "RUNTIME_ERROR",
+              "TIME_LIMIT_EXCEEDED",
+              "MEMORY_LIMIT_EXCEEDED",
+              "SYSTEM_ERROR"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "name": "get_my_submission_detail",
+      "description": "get my submission detail",
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      },
+      "inputSchema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "submissionId": {
+            "type": "string",
+            "pattern": "^[1-9][0-9]{0,18}$",
+            "maxLength": 19
+          }
+        },
+        "required": [
+          "submissionId"
+        ],
+        "additionalProperties": false
+      },
+      "outputSchema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "ok": {
+            "type": "boolean"
+          },
+          "data": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/SubmissionDetail"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "error": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/ToolError"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "ok",
+          "data",
+          "error"
+        ],
+        "additionalProperties": false,
+        "oneOf": [
+          {
+            "properties": {
+              "ok": {
+                "const": true
+              },
+              "data": {
+                "$ref": "#/$defs/SubmissionDetail"
+              },
+              "error": {
+                "type": "null"
+              }
+            }
+          },
+          {
+            "properties": {
+              "ok": {
+                "const": false
+              },
+              "data": {
+                "type": "null"
+              },
+              "error": {
+                "$ref": "#/$defs/ToolError"
+              }
+            }
+          }
+        ],
+        "$defs": {
+          "ToolError": {
+            "type": "object",
+            "properties": {
+              "code": {
+                "type": "string",
+                "enum": [
+                  "INVALID_ARGUMENT",
+                  "NOT_FOUND",
+                  "FORBIDDEN",
+                  "TIMEOUT",
+                  "UNAVAILABLE",
+                  "INTERNAL"
+                ]
+              },
+              "message": {
+                "type": "string",
+                "maxLength": 200
+              },
+              "retryable": {
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "code",
+              "message",
+              "retryable"
+            ],
+            "additionalProperties": false
+          },
+          "SubmissionDetail": {
+            "type": "object",
+            "properties": {
+              "submission": {
+                "$ref": "#/$defs/SubmissionSummary"
+              },
+              "problemTitle": {
+                "type": "string"
+              },
+              "publicContent": {
+                "type": "string"
+              },
+              "language": {
+                "type": "string",
+                "const": "java"
+              },
+              "code": {
+                "type": "string",
+                "maxLength": 100000
+              },
+              "codeTruncated": {
+                "type": "boolean"
+              },
+              "timeUsed": {
+                "anyOf": [
+                  {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "memoryUsed": {
+                "anyOf": [
+                  {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "errorSummary": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "maxLength": 2000
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            },
+            "required": [
+              "submission",
+              "problemTitle",
+              "publicContent",
+              "language",
+              "code",
+              "codeTruncated",
+              "timeUsed",
+              "memoryUsed",
+              "errorSummary"
+            ],
+            "additionalProperties": false
+          },
+          "SubmissionSummary": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "pattern": "^[1-9][0-9]{0,18}$",
+                "maxLength": 19
+              },
+              "problemId": {
+                "type": "string",
+                "pattern": "^[1-9][0-9]{0,18}$",
+                "maxLength": 19
+              },
+              "courseId": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "pattern": "^[1-9][0-9]{0,18}$",
+                    "maxLength": 19
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "lessonId": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "pattern": "^[1-9][0-9]{0,18}$",
+                    "maxLength": 19
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "status": {
+                "$ref": "#/$defs/JudgeStatus"
+              },
+              "assistanceLevel": {
+                "$ref": "#/$defs/AssistanceLevel"
+              },
+              "createdAt": {
+                "type": "string",
+                "format": "date-time"
+              }
+            },
+            "required": [
+              "id",
+              "problemId",
+              "courseId",
+              "lessonId",
+              "status",
+              "assistanceLevel",
+              "createdAt"
+            ],
+            "additionalProperties": false
+          },
+          "AssistanceLevel": {
+            "type": "string",
+            "enum": [
+              "NONE",
+              "HINT",
+              "SOLUTION",
+              "UNKNOWN"
+            ]
+          },
+          "JudgeStatus": {
+            "type": "string",
+            "enum": [
+              "PENDING",
+              "JUDGING",
+              "ACCEPTED",
+              "WRONG_ANSWER",
+              "COMPILE_ERROR",
+              "RUNTIME_ERROR",
+              "TIME_LIMIT_EXCEEDED",
+              "MEMORY_LIMIT_EXCEEDED",
+              "SYSTEM_ERROR"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "name": "search_course_knowledge",
+      "description": "search course knowledge",
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      },
+      "inputSchema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "courseId": {
+            "type": "string",
+            "pattern": "^[1-9][0-9]{0,18}$",
+            "maxLength": 19
+          },
+          "lessonId": {
+            "type": "string",
+            "pattern": "^[1-9][0-9]{0,18}$",
+            "maxLength": 19
+          },
+          "query": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1000
+          },
+          "topK": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 5,
+            "default": 5
+          }
+        },
+        "required": [
+          "courseId",
+          "query"
+        ],
+        "additionalProperties": false
+      },
+      "outputSchema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "ok": {
+            "type": "boolean"
+          },
+          "data": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/SearchResult"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "error": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/ToolError"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "ok",
+          "data",
+          "error"
+        ],
+        "additionalProperties": false,
+        "oneOf": [
+          {
+            "properties": {
+              "ok": {
+                "const": true
+              },
+              "data": {
+                "$ref": "#/$defs/SearchResult"
+              },
+              "error": {
+                "type": "null"
+              }
+            }
+          },
+          {
+            "properties": {
+              "ok": {
+                "const": false
+              },
+              "data": {
+                "type": "null"
+              },
+              "error": {
+                "$ref": "#/$defs/ToolError"
+              }
+            }
+          }
+        ],
+        "$defs": {
+          "ToolError": {
+            "type": "object",
+            "properties": {
+              "code": {
+                "type": "string",
+                "enum": [
+                  "INVALID_ARGUMENT",
+                  "NOT_FOUND",
+                  "FORBIDDEN",
+                  "TIMEOUT",
+                  "UNAVAILABLE",
+                  "INTERNAL"
+                ]
+              },
+              "message": {
+                "type": "string",
+                "maxLength": 200
+              },
+              "retryable": {
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "code",
+              "message",
+              "retryable"
+            ],
+            "additionalProperties": false
+          },
+          "SearchResult": {
+            "type": "object",
+            "properties": {
+              "retrievalMode": {
+                "type": "string",
+                "enum": [
+                  "KEYWORD"
+                ]
+              },
+              "items": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/SearchHit"
+                },
+                "maxItems": 5
+              }
+            },
+            "required": [
+              "retrievalMode",
+              "items"
+            ],
+            "additionalProperties": false
+          },
+          "SearchHit": {
+            "type": "object",
+            "properties": {
+              "text": {
+                "type": "string",
+                "maxLength": 2000
+              },
+              "score": {
+                "type": "number",
+                "minimum": 0
+              },
+              "citation": {
+                "$ref": "#/$defs/Citation"
+              }
+            },
+            "required": [
+              "text",
+              "score",
+              "citation"
+            ],
+            "additionalProperties": false
+          },
+          "Citation": {
+            "type": "object",
+            "properties": {
+              "citationId": {
+                "type": "string",
+                "pattern": "^chunk:[1-9][0-9]*:v[1-9][0-9]*$"
+              },
+              "courseId": {
+                "type": "string",
+                "pattern": "^[1-9][0-9]{0,18}$",
+                "maxLength": 19
+              },
+              "lessonId": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "pattern": "^[1-9][0-9]{0,18}$",
+                    "maxLength": 19
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "resourceId": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "pattern": "^[1-9][0-9]{0,18}$",
+                    "maxLength": 19
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "documentId": {
+                "type": "string",
+                "pattern": "^[1-9][0-9]{0,18}$",
+                "maxLength": 19
+              },
+              "documentVersion": {
+                "type": "string",
+                "pattern": "^[1-9][0-9]{0,18}$",
+                "maxLength": 19
+              },
+              "title": {
+                "type": "string"
+              },
+              "page": {
+                "anyOf": [
+                  {
+                    "type": "integer",
+                    "minimum": 1
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "startSeconds": {
+                "anyOf": [
+                  {
+                    "type": "number",
+                    "minimum": 0
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "endSeconds": {
+                "anyOf": [
+                  {
+                    "type": "number",
+                    "minimum": 0
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "quote": {
+                "type": "string",
+                "maxLength": 2000
+              },
+              "contentUrl": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "citationId",
+              "courseId",
+              "lessonId",
+              "resourceId",
+              "documentId",
+              "documentVersion",
+              "title",
+              "page",
+              "startSeconds",
+              "endSeconds",
+              "quote",
+              "contentUrl"
+            ],
+            "additionalProperties": false
+          }
+        }
+      }
+    },
+    {
+      "name": "list_practice_candidates",
+      "description": "list practice candidates",
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      },
+      "inputSchema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "courseId": {
+            "type": "string",
+            "pattern": "^[1-9][0-9]{0,18}$",
+            "maxLength": 19
+          },
+          "knowledgePointIds": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^[1-9][0-9]{0,18}$",
+              "maxLength": 19
+            },
+            "maxItems": 20
+          },
+          "difficulty": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 3
+          },
+          "limit": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 10,
+            "default": 10
+          }
+        },
+        "required": [
+          "courseId"
+        ],
+        "additionalProperties": false
+      },
+      "outputSchema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "ok": {
+            "type": "boolean"
+          },
+          "data": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/PracticeCandidates"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "error": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/ToolError"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "ok",
+          "data",
+          "error"
+        ],
+        "additionalProperties": false,
+        "oneOf": [
+          {
+            "properties": {
+              "ok": {
+                "const": true
+              },
+              "data": {
+                "$ref": "#/$defs/PracticeCandidates"
+              },
+              "error": {
+                "type": "null"
+              }
+            }
+          },
+          {
+            "properties": {
+              "ok": {
+                "const": false
+              },
+              "data": {
+                "type": "null"
+              },
+              "error": {
+                "$ref": "#/$defs/ToolError"
+              }
+            }
+          }
+        ],
+        "$defs": {
+          "ToolError": {
+            "type": "object",
+            "properties": {
+              "code": {
+                "type": "string",
+                "enum": [
+                  "INVALID_ARGUMENT",
+                  "NOT_FOUND",
+                  "FORBIDDEN",
+                  "TIMEOUT",
+                  "UNAVAILABLE",
+                  "INTERNAL"
+                ]
+              },
+              "message": {
+                "type": "string",
+                "maxLength": 200
+              },
+              "retryable": {
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "code",
+              "message",
+              "retryable"
+            ],
+            "additionalProperties": false
+          },
+          "PracticeCandidates": {
+            "type": "object",
+            "properties": {
+              "items": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/PracticeCandidate"
+                },
+                "maxItems": 10
+              }
+            },
+            "required": [
+              "items"
+            ],
+            "additionalProperties": false
+          },
+          "PracticeCandidate": {
+            "type": "object",
+            "properties": {
+              "problemId": {
+                "type": "string",
+                "pattern": "^[1-9][0-9]{0,18}$",
+                "maxLength": 19
+              },
+              "title": {
+                "type": "string"
+              },
+              "difficulty": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 3
+              },
+              "knowledgePointIds": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "pattern": "^[1-9][0-9]{0,18}$",
+                  "maxLength": 19
+                }
+              },
+              "accepted": {
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "problemId",
+              "title",
+              "difficulty",
+              "knowledgePointIds",
+              "accepted"
+            ],
+            "additionalProperties": false
+          }
+        }
+      }
+    }
+  ]
+}
